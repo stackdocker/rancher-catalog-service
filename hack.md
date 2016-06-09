@@ -39,6 +39,8 @@ key "^-pq" to detach tty
 
 * REST service
 
+Container Address
+
     [vagrant@localhost rancher-catalog-service]$ docker inspect -f {{.NetworkSettings.IPAddress}} $(docker ps | grep rancher-catalog-service | awk '{print $1}') 
     172.17.0.14
 
