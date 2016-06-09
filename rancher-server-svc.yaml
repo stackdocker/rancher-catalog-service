@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rancher-server
+  labels:
+    app: rancher-server
+    name: rancher-server
+spec:
+  type: NodePort
+  ports:
+  - port: 3306
+    protocol: TCP
+    name: mysql
+  - port: 8080
+    protocol: TCP
+    name: httprancher
+  - port: 8088
+    protocol: TCP
+    name: httpcatalog
+  selector:
+    name: rancher-server

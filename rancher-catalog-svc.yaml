@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rancher-catalog
+  labels:
+    app: rancher-catalog
+    name: rancher-catalog
+spec:
+  type: NodePort
+  ports:
+  - port: 8088
+    protocol: TCP
+    name: http
+  selector:
+    name: rancher-catalog

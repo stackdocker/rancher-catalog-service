@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  creationTimestamp: 2016-06-09T02:29:15Z
+  labels:
+    app: rancher-server
+    name: rancher-server
+  name: rancher-server
+spec:
+  replicas: 1
+  selector:
+    name: rancher-server
+  template:
+    metadata:
+      creationTimestamp: 2016-06-09T02:29:15Z
+      labels:
+        app: rancher-server
+        name: rancher-server
+      name: rancher-server
+    spec:
+      containers:
+      - image: tangfeixiong/rancher-server
+        imagePullPolicy: Always
+        name: rancher-server
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8088
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "0"
+            memory: "0"
+        # volumeMounts:
+        # - mountPath: /tmp/cloned-catalog
+        #   name: data
+      serviceAccountName: ""
+      # volumes:
+      # - name: data
+      #   persistentVolumeClaim:
+      #     claimName: data
+      # - emptyDir: {}
+      #   name: data1
+      # - hostPath:
+      #     path: /mnt/hostpath1
+      #   name: data2
+      # - name: data3
+      #   nfs:
+      #     server: 10.0.0.1
+      #     path: /mnt/nfs1
+      #     readOnly: false
