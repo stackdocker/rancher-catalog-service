@@ -1,15 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rancher-catalog
   labels:
     app: rancher-catalog
+    heritage: harpoon
     name: rancher-catalog
+    vendor: qingyuanos.io
+  name: rancher-catalog
+  namespace: helm
 spec:
   type: NodePort
   ports:
-  - port: 8088
+  - name: resthttp
+    nodePort: 32127
+    port: 8088
     protocol: TCP
-    name: http
   selector:
     name: rancher-catalog

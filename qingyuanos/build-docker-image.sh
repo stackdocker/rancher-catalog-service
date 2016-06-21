@@ -3,6 +3,8 @@ set -e
 
 REGISTRY="tangfeixiong"
 REPO="rancher-catalog-service"
+TAG="0.6.1"
+
 if [[ $# == 0 || $1 == "catalog" ]]; then
 	echo "Begin to build ${REPO}" >/dev/stdout
 elif [[ $1 == "server" ]]; then
@@ -17,17 +19,21 @@ tgt=$(mktemp -d)
 
 mkdir -p $tgt
 
-ROOTFS=$(dirname "${BASH_SOURCE}")
+SCRIPTFS=$(dirname "${BASH_SOURCE}")
+ROOTFS=$SCRIPTFS/..
 
-go build -v -o $tgt/rancher-catalog-service $ROOTFS/main.go
+#go build -a -v -tags netgo -o $tgt/rancher-catalog-service $ROOTFS/main.go
+go build -v -tags netgo -o $tgt/rancher-catalog-service $ROOTFS/main.go
 
-cp $ROOTFS/Dockerfile $tgt
-if [[ ${REPO} != "rancher-catalog-service" ]]; then
+cp -r $SCRIPTFS/cloned-catalog $tgt
+
+if [[ ${REPO} == "rancher-catalog-service" ]]; then
+	cp $SCRIPTFS/Dockerfile.alpine $tgt/Dockerfile
+else
+	cp $SCRIPTFS/Dockerfile $tgt
 	sed -i 's%^CMD.*$%CMD ["/usr/bin/s6-svscan", "/service"]%1' $tgt/Dockerfile
 fi
 
-cp -r $ROOTFS/cloned-catalog $tgt
-
-docker build -t ${REGISTRY}/${REPO} $tgt
+docker build -t ${REGISTRY}/${REPO}:${TAG} $tgt
 
 rm -rf $tgt
